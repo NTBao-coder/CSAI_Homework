@@ -1,0 +1,30 @@
+% !TeX root = ../main.tex
+\section{Câu 1: Khoảng cách Manhattan}
+
+Quy ước tọa độ cột $A=1$, $B=2$, $C=3$, $D=4$; hàng $1$--$5$ tăng từ dưới lên trên. Với hai ô $P=(x_P,y_P)$ và $Q=(x_Q,y_Q)$:
+\[
+    \boxed{d_M(P,Q)=|x_P-x_Q|+|y_P-y_Q|.}
+\]
+Ví dụ: $d_M(B1,A3)=|2-1|+|1-3|=3$;
+$d_M(B1,D3)=2+2=4$ và $d_M(B1,C5)=1+4=5$.
+
+\begin{table}[ht!]
+    \centering
+    \caption{Khoảng cách từ các ô trắng tới ba đích, theo đúng thứ tự cột của đề.}
+    {\fontsize{10.5pt}{13pt}\selectfont
+    \setlength{\tabcolsep}{3.7pt}
+    \renewcommand{\arraystretch}{1.35}
+    \begin{tabular}{l*{12}{r}}
+        \toprule
+        \textbf{Đích / Ô} & A3 & A4 & A5 & B1 & B2 & B3 & B5 & C3 & C5 & D3 & D4 & D5 \\
+        \midrule
+        Bạn 1 (A3) & 0 & 1 & 2 & 3 & 2 & 1 & 3 & 2 & 4 & 3 & 4 & 5 \\
+        Bạn 2 (D3) & 3 & 4 & 5 & 4 & 3 & 2 & 4 & 1 & 3 & 0 & 1 & 2 \\
+        Boss (C5) & 4 & 3 & 2 & 5 & 4 & 3 & 1 & 2 & 0 & 3 & 2 & 1 \\
+        \bottomrule
+    \end{tabular}}
+\end{table}
+
+Manhattan đo độ lệch tọa độ, chưa xét vật cản hay chiều đi. Ví dụ, từ A4 tới D3 có khoảng cách Manhattan bằng 4, dù không thể đi về hàng 3. Vì vậy các giá trị trong bảng không phải chi phí đường đi thực tế.
+
+\noindent\textbf{Kiểm tra bảng:} khoảng cách từ mỗi đích tới chính nó bằng 0. Các ô đen, chẳng hạn B4 và C4, không xuất hiện trong bảng. Mọi ô còn lại được tính bằng cùng công thức, kể cả khi không có đường hợp lệ tới đích.

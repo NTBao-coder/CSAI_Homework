@@ -1,0 +1,36 @@
+{
+    "git.ignoreLimitWarning": true,
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "latex-workshop.latex.recipe.default": "first",
+    "latex-workshop.latex.outDir": "%DIR%/build",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "XeLaTeX (latexmk)",
+            "tools": ["xelatexmk"]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "xelatexmk",
+            "command": "/usr/local/texlive/2025/bin/universal-darwin/latexmk",
+            "args": [
+                "-xelatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-halt-on-error",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {
+                "PATH": "/usr/local/texlive/2025/bin/universal-darwin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+            }
+        }
+    ],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.view.pdf.tab.editorGroup": "right",
+    "[latex]": {
+        "files.autoSave": "afterDelay",
+        "files.autoSaveDelay": 1500
+    }
+}

@@ -1,0 +1,97 @@
+% !TeX root = ../main.tex
+\clearpage
+\section{Câu 2: Chiến lược tìm kiếm A*}
+\subsection{Chọn thứ tự đón bạn}
+
+Điều kiện hoàn thành là tới C5 \textbf{sau khi đã đón cả A3 và D3}. Nếu tìm kiếm toàn bài trong một lần, trạng thái cần gồm $(\text{vị trí},\text{tập bạn đã đón})$. Ở đây sử dụng ba cây A* với đích cố định, như đề cho phép, và xét đủ hai thứ tự đón bạn để lựa chọn:
+
+\begin{figure}[ht!]
+    \centering
+    \begin{minipage}[c]{0.44\textwidth}
+        \centering
+        \begin{tikzpicture}[x=0.85cm,y=0.64cm,font=\small]
+            \foreach \x in {1,...,4} \foreach \y in {1,...,5}
+                \filldraw[fill=black!75,draw=white] (\x-0.5,\y-0.5) rectangle (\x+0.5,\y+0.5);
+            \foreach \x/\y in {1/3,1/4,1/5,2/1,2/2,2/3,2/5,3/3,3/5,4/3,4/4,4/5}
+                \filldraw[fill=white,draw=black!60] (\x-0.5,\y-0.5) rectangle (\x+0.5,\y+0.5);
+            \foreach \x/\s in {1/A,2/B,3/C,4/D} \node at (\x,0) {\s};
+            \foreach \y in {1,...,5} \node at (0,\y) {\y};
+            \node[font=\bfseries\small,text=FITBlue] at (2,1) {S};
+            \node[font=\bfseries\small,text=BorderGreen!70!black] at (1,3) {F1};
+            \node[font=\bfseries\small,text=BorderGreen!70!black] at (4,3) {F2};
+            \node[font=\bfseries\small,text=BorderOrange!80!black] at (3,5) {G};
+        \end{tikzpicture}
+    \end{minipage}\hfill
+    \begin{minipage}[c]{0.52\textwidth}
+        \small
+        \textbf{S}: xuất phát B1.\\
+        \textbf{F1, F2}: hai bạn ở A3, D3.\\
+        \textbf{G}: boss tại C5.\\[4pt]
+        Chỉ đi \textbf{lên, trái, phải} sang ô trắng kề cạnh. Mỗi bước tốn 1 đơn vị năng lượng; không được đi xuống.
+    \end{minipage}
+    \caption{Bản đồ và các vị trí cần đi qua.}
+\end{figure}
+
+\begin{table}[ht!]
+    \centering
+    \caption{Cận dưới Manhattan cho hai thứ tự đón bạn.}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabular}{lc}
+        \toprule
+        \textbf{Thứ tự} & \textbf{Cận dưới tổng chi phí} \\
+        \midrule
+        $B1\to A3\to D3\to C5$ & $3+3+3=\mathbf{9}$ \\
+        $B1\to D3\to A3\to C5$ & $4+3+4=11$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Ba cây ở các trang sau tìm được đường hợp lệ đạt cận dưới 9. Thứ tự ngược cũng đạt 11 qua đường
+\[
+ B1\to B2\to B3\to C3\to D3\to C3\to B3\to A3\to A4\to A5\to B5\to C5.
+\]
+Mọi lời giải đều thuộc một trong hai thứ tự đón lần đầu này, nên phương án \textbf{A3 trước, D3 sau} có chi phí tối ưu toàn cục bằng 9. Kết luận dựa trên hai cận dưới và các đường đạt cận, không chỉ dựa vào việc A3 gần hơn.
+
+\clearpage
+\subsection{Heuristic và quy ước chạy A*}
+
+Ba lượt lần lượt sử dụng
+\[
+ h_1(n)=d_M(n,A3),\qquad h_2(n)=d_M(n,D3),\qquad h_3(n)=d_M(n,C5).
+\]
+Mỗi nút được ghi theo đúng thứ tự \textbf{$(f,g,h)$}, với $g$ là số bước \textbf{từ gốc của cây hiện tại}, $h$ ứng với đích của lượt đó và $f=g+h$. Gốc mỗi cây có $g=0$; chi phí tích lũy trước ba lượt lần lượt là $0,3,6$.
+
+Mỗi cạnh hợp lệ có chi phí 1 nên, với đích cố định $t$,
+\[
+ d_M(n,t)\le 1+d_M(n',t)\quad\text{cho mọi cạnh }n\to n'.
+\]
+Đồng thời $h(t)=0$ và mọi đường tới $t$ dài ít nhất $d_M(n,t)$. Heuristic vì vậy \textbf{nhất quán và chấp nhận được}, kể cả khi bản đồ có vật cản và cấm đi xuống.
+
+\begin{enumerate}
+    \setlength{\itemsep}{1pt}
+    \setlength{\parskip}{0pt}
+    \item Lấy nút có $f$ nhỏ nhất; hòa thì chọn $h$ nhỏ nhất; vẫn hòa thì chọn nút vào OPEN trước. Sinh con theo \textbf{Up, Left, Right}.
+    \item Bỏ ô đen, ô ngoài bản đồ và bản sao có $g$ không tốt hơn giá trị đã biết. Khởi tạo lại OPEN, CLOSED ở từng lượt.
+    \item Dừng khi \textbf{lấy đích khỏi OPEN}; không mở rộng các nhánh còn chờ sau thời điểm đó.
+\end{enumerate}
+
+\begin{table}[ht!]
+    \centering
+    \caption{Phân biệt chi phí cục bộ trong cây và chi phí tích lũy toàn hành trình.}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{c c c c}
+        \toprule
+        \textbf{Lượt} & \textbf{Đoạn tìm kiếm} & \textbf{$g$ tại đích} & \textbf{Tích lũy tại đích} \\
+        \midrule
+        1 & $B1\to A3$ & 3 & $0+3=3$ \\
+        2 & $A3\to D3$ & 3 & $3+3=6$ \\
+        3 & $D3\to C5$ & 3 & $6+3=9$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Muốn biểu diễn $g$ tính từ B1 trong mọi cây, cộng thêm $0$, $3$, $6$ vào cả $f$ và $g$ của ba lượt tương ứng, giữ nguyên $h$. Việc cộng cùng một hằng số cho các nút trong một lượt không thay đổi thứ tự ưu tiên.
+
+\begin{calloutnote}[Không loại nhầm trạng thái cần quay lại]
+    $(B3,\varnothing)$ và $(B3,\{A3\})$ là hai trạng thái khác nhau của toàn bài. Việc dùng CLOSED riêng cho từng lượt cho phép quay lại B3 sau khi đón bạn ở A3.
+\end{calloutnote}

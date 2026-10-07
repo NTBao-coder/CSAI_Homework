@@ -1,0 +1,43 @@
+% !TeX root = ../main.tex
+\clearpage
+\subsection{Đường đi tốt nhất và kiểm chứng kết quả}
+
+Ghép ba đoạn, chỉ giữ một lần mỗi điểm nối A3 và D3:
+\begin{calloutnote}[Đáp án cuối cùng]
+    \centering
+    $B1\to B2\to B3\to A3\to B3\to C3\to D3$\\
+    $\to D4\to D5\to C5$.\\[3pt]
+    \textbf{Tổng chi phí tối ưu: $3+3+3=9$ đơn vị năng lượng.}
+\end{calloutnote}
+
+Dãy hành động là \textbf{Up, Up, Left, Right, Right, Right, Up, Up, Left}. Có 10 lần xuất hiện ô nhưng chỉ 9 lần di chuyển. B3 được ghé hai lần vì cần quay ngang từ A3 để đón D3; đây là bước đi hợp lệ, không phải đi xuống.
+
+\begin{table}[ht!]
+    \centering
+    \caption{Vị trí, năng lượng tích lũy và trạng thái đón bạn trên đường kết quả.}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{c c X}
+        \toprule
+        \textbf{Bước / năng lượng} & \textbf{Vị trí} & \textbf{Bạn đã đón / sự kiện} \\
+        \midrule
+        0 & B1 & Chưa có bạn; xuất phát. \\
+        1 & B2 & Chưa có bạn. \\
+        2 & B3 & Chưa có bạn. \\
+        3 & A3 & Đón bạn 1 ở A3. \\
+        4 & B3 & Có bạn 1. \\
+        5 & C3 & Có bạn 1. \\
+        6 & D3 & Đón bạn 2; đã có cả A3 và D3. \\
+        7 & D4 & Có cả hai bạn. \\
+        8 & D5 & Có cả hai bạn. \\
+        9 & C5 & Đủ điều kiện đánh boss; hoàn thành. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\textbf{Tính hợp lệ.} Mọi ô trên đường đều trắng; các bước chỉ đi lên, trái, phải. A3 được đón ở bước 3, D3 ở bước 6, trước khi tới C5 ở bước 9.
+
+\textbf{Tính tối ưu.} Mọi đường đón A3 trước cần ít nhất 9 bước; mọi đường đón D3 trước cần ít nhất 11 bước. Đường vừa tìm có đúng 9 bước, đạt cận dưới nhỏ nhất trong tất cả các thứ tự có thể, nên tối ưu toàn cục.
+
+\textbf{Đối chiếu độc lập.} Chương trình \texttt{tools/verify\_search.py} tính lại bảng Manhattan, các bộ $(f,g,h)$ và chạy BFS trên trạng thái $(\text{ô},m)$: $m=0$ chưa có bạn; $1$ có A3; $2$ có D3; $3$ có cả hai. BFS từ $(B1,0)$ tới $(C5,3)$ không cố định thứ tự đón bạn, xác nhận cùng đường đi và chi phí tối ưu 9.
+
+\noindent{\footnotesize\color{gray}Đề bài: \textit{HomeWork\_1\_Search.pdf}, trang 1--2. Lời giải sơ bộ chi tiết: \textit{Solution.md}.}

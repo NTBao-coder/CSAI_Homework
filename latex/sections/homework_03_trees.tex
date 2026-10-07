@@ -1,0 +1,142 @@
+% !TeX root = ../main.tex
+\clearpage
+\subsection{Cây 1: Từ B1 tới bạn ở A3}
+
+Đặt $h=h_1=d_M(n,A3)$. Nút gốc B1 có $g=0$, $h=3$, $f=3$. Hai bước đầu bắt buộc đi lên B2 rồi B3 vì các ô bên trái và phải đều bị chặn.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{tikzpicture}
+        \node[chosen] (b1) at (0,0) {\textbf{B1}\\$(3,0,3)$};
+        \node[chosen] (b2) at (0,-1.55) {\textbf{B2}\\$(3,1,2)$};
+        \node[chosen] (b3) at (0,-3.1) {\textbf{B3}\\$(3,2,1)$};
+        \node[goalnode] (a3) at (-2.2,-4.65) {\textbf{A3 -- đích}\\$(3,3,0)$};
+        \node[waiting] (c3) at (2.2,-4.65) {\textbf{C3 -- OPEN}\\$(5,3,2)$};
+        \draw[bestedge] (b1) -- node[right,font=\scriptsize]{U} (b2);
+        \draw[bestedge] (b2) -- node[right,font=\scriptsize]{U} (b3);
+        \draw[bestedge] (b3) -- node[above left,font=\scriptsize]{L} (a3);
+        \draw[branch] (b3) -- node[above right,font=\scriptsize]{R} (c3);
+    \end{tikzpicture}
+    \caption{Cây A* thứ nhất; cạnh xanh đậm đánh dấu đường được chọn.}
+\end{figure}
+
+\noindent\textbf{Chú giải cho cả ba cây:} nút xanh nhạt nằm trên đường kết quả; nút xanh lá là đích; nút cam còn trong OPEN khi dừng; nút xám nét đứt là bản sao bị loại. Nhãn số là $(f,g,h)$; U, L, R tương ứng Up, Left, Right.
+
+\begin{table}[ht!]
+    \centering
+    \caption{Diễn tiến OPEN của lượt 1, xếp theo thứ tự ưu tiên.}
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{c l X}
+        \toprule
+        \textbf{Lần lấy} & \textbf{Nút lấy ra} & \textbf{OPEN sau xử lý} \\
+        \midrule
+        1 & B1 $(3,0,3)$ & B2 $(3,1,2)$ \\
+        2 & B2 $(3,1,2)$ & B3 $(3,2,1)$ \\
+        3 & B3 $(3,2,1)$ & A3 $(3,3,0)$; C3 $(5,3,2)$ \\
+        4 & A3 $(3,3,0)$ & Dừng; C3 $(5,3,2)$ còn chờ. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+Tại B3, ô B4 phía trên bị chặn. Nút A3 có $f=3+0=3$, còn C3 có $f=3+2=5$, nên A3 được lấy ra trước. Không sinh thêm con của A3 vì đã đạt đích của lượt.
+
+\begin{calloutnote}[Kết quả lượt 1]
+    $B1\to B2\to B3\to A3$. Chi phí \textbf{3 bước}; đã đón bạn 1.
+\end{calloutnote}
+
+\clearpage
+\subsection{Cây 2: Từ A3 tới bạn ở D3}
+
+Khởi tạo lại $g(A3)=0$ và đặt $h=h_2=d_M(n,D3)$. Mèo phải đi ngang ở hàng 3 để đón bạn thứ hai; nếu đi lên A4 thì không thể quay về hàng 3.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{tikzpicture}
+        \node[chosen] (a3) at (0,0) {\textbf{A3}\\$(3,0,3)$};
+        \node[waiting] (a4) at (-2.8,-1.65) {\textbf{A4 -- OPEN}\\$(5,1,4)$};
+        \node[chosen] (b3) at (1.5,-1.65) {\textbf{B3}\\$(3,1,2)$};
+        \node[rejected] (a3dup) at (-1.1,-3.3) {\textbf{A3 -- loại}\\$(5,2,3)$};
+        \node[chosen] (c3) at (3,-3.3) {\textbf{C3}\\$(3,2,1)$};
+        \node[rejected] (b3dup) at (0.6,-4.95) {\textbf{B3 -- loại}\\$(5,3,2)$};
+        \node[goalnode] (d3) at (5,-4.95) {\textbf{D3 -- đích}\\$(3,3,0)$};
+        \draw[branch] (a3) -- node[above left,font=\scriptsize]{U} (a4);
+        \draw[bestedge] (a3) -- node[above right,font=\scriptsize]{R} (b3);
+        \draw[rejectedge] (b3) -- node[above left,font=\scriptsize]{L} (a3dup);
+        \draw[bestedge] (b3) -- node[above right,font=\scriptsize]{R} (c3);
+        \draw[rejectedge] (c3) -- node[above left,font=\scriptsize]{L} (b3dup);
+        \draw[bestedge] (c3) -- node[above right,font=\scriptsize]{R} (d3);
+    \end{tikzpicture}
+    \caption{Cây A* thứ hai, gồm cả hai bản sao được sinh nhưng bị loại.}
+\end{figure}
+
+\begin{table}[ht!]
+    \centering
+    \caption{Diễn tiến OPEN của lượt 2.}
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{c l X}
+        \toprule
+        \textbf{Lần lấy} & \textbf{Nút lấy ra} & \textbf{OPEN sau xử lý} \\
+        \midrule
+        1 & A3 $(3,0,3)$ & B3 $(3,1,2)$; A4 $(5,1,4)$ \\
+        2 & B3 $(3,1,2)$ & C3 $(3,2,1)$; A4 $(5,1,4)$ \\
+        3 & C3 $(3,2,1)$ & D3 $(3,3,0)$; A4 $(5,1,4)$ \\
+        4 & D3 $(3,3,0)$ & Dừng; A4 $(5,1,4)$ còn chờ. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+A4 có $h_2=4$, $g=1$ nên $f=5$ và chưa được mở rộng. Nhánh $B3\to A3$ tạo $g=2>0=g_{\mathrm{tốt\ nhất}}(A3)$ nên bị loại. Tương tự, $C3\to B3$ tạo $g=3>1=g_{\mathrm{tốt\ nhất}}(B3)$ nên bị loại; các bộ số trên nút xám là giá trị của \emph{bản sao mới}. B4, C4 đều bị chặn.
+
+B3 ở lượt này vẫn hợp lệ dù đã đi qua trong lượt 1: sau khi đón A3, trạng thái bạn đã thay đổi và đây là một lượt tìm kiếm mới.
+
+\begin{calloutnote}[Kết quả lượt 2]
+    $A3\to B3\to C3\to D3$. Chi phí riêng \textbf{3 bước}, tích lũy \textbf{6}; đã đón đủ hai bạn.
+\end{calloutnote}
+
+\clearpage
+\subsection{Cây 3: Từ D3 tới boss ở C5}
+
+Khởi tạo lại $g(D3)=0$ và đặt $h=h_3=d_M(n,C5)$. Lúc này điều kiện đón đủ hai bạn đã thỏa mãn; chỉ cần tìm đường ngắn nhất tới C5.
+
+\begin{figure}[ht!]
+    \centering
+    \begin{tikzpicture}
+        \node[chosen] (d3) at (0,0) {\textbf{D3}\\$(3,0,3)$};
+        \node[chosen] (d4) at (-2.2,-1.55) {\textbf{D4}\\$(3,1,2)$};
+        \node[waiting] (c3) at (2.2,-1.55) {\textbf{C3 -- OPEN}\\$(3,1,2)$};
+        \node[chosen] (d5) at (-2.2,-3.1) {\textbf{D5}\\$(3,2,1)$};
+        \node[goalnode] (c5) at (-2.2,-4.65) {\textbf{C5 -- đích}\\$(3,3,0)$};
+        \draw[bestedge] (d3) -- node[above left,font=\scriptsize]{U} (d4);
+        \draw[branch] (d3) -- node[above right,font=\scriptsize]{L} (c3);
+        \draw[bestedge] (d4) -- node[right,font=\scriptsize]{U} (d5);
+        \draw[bestedge] (d5) -- node[right,font=\scriptsize]{L} (c5);
+    \end{tikzpicture}
+    \caption{Cây A* thứ ba; nhánh C3 còn chờ khi C5 được lấy ra.}
+\end{figure}
+
+\begin{table}[ht!]
+    \centering
+    \caption{Diễn tiến OPEN của lượt 3.}
+    \small
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabularx}{\textwidth}{c l X}
+        \toprule
+        \textbf{Lần lấy} & \textbf{Nút lấy ra} & \textbf{OPEN sau xử lý} \\
+        \midrule
+        1 & D3 $(3,0,3)$ & D4 $(3,1,2)$; C3 $(3,1,2)$ \\
+        2 & D4 $(3,1,2)$ & D5 $(3,2,1)$; C3 $(3,1,2)$ \\
+        3 & D5 $(3,2,1)$ & C5 $(3,3,0)$; C3 $(3,1,2)$ \\
+        4 & C5 $(3,3,0)$ & Dừng; C3 $(3,1,2)$ còn chờ. \\
+        \bottomrule
+    \end{tabularx}
+\end{table}
+
+\textbf{Xử lý hòa:} D4 và C3 cùng $(3,1,2)$, nhưng D4 được sinh trước theo thứ tự Up trước Left nên được lấy trước. Tiếp theo, D5 có cùng $f=3$ nhưng $h=1<2=h(C3)$; rồi C5 có $h=0<2$. Vì vậy thứ tự lấy nút là D3, D4, D5, C5.
+
+Nếu thay quy tắc hòa, số nút mở rộng có thể khác; chi phí tối ưu vẫn bằng 3. Cây chỉ vẽ các nút được sinh trước lúc dừng, nên không có con của C3 hoặc C5.
+
+\begin{calloutnote}[Kết quả lượt 3]
+    $D3\to D4\to D5\to C5$. Chi phí riêng \textbf{3 bước}, tích lũy \textbf{9}; tới boss cùng cả hai bạn.
+\end{calloutnote}

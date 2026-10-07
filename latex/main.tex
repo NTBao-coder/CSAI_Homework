@@ -1,0 +1,71 @@
+% ==============================================================================
+% BIỂU MẪU BÁO CÁO VÀ BÀI TẬP KHOA CÔNG NGHỆ THÔNG TIN - ĐH KHTN (ĐHQG-HCM)
+% Biên dịch bằng: XeLaTeX hoặc LuaLaTeX
+% ==============================================================================
+\documentclass[12pt,a4paper]{article}
+\usepackage{scrextend}
+\changefontsizes{13pt}
+
+% Nạp gói cấu hình chuẩn nhận diện FIT - HCMUS
+\usepackage{fit_hcmus}
+\usepackage{array}
+\usetikzlibrary{arrows.meta}
+\tcbset{colbacktitle=LightBlueBg}
+\hypersetup{
+    pdftitle={Homework Search - 24120023 - Nguyen Thanh Bao},
+    pdfauthor={Nguyễn Thành Bảo}
+}
+\tikzset{
+    searchnode/.style={draw=HCMUSBlue,rounded corners=3pt,align=center,
+        minimum width=2.1cm,minimum height=0.95cm,font=\small,fill=white},
+    chosen/.style={searchnode,fill=LightBlueBg,line width=1pt},
+    goalnode/.style={chosen,draw=BorderGreen,fill=LightGreenBg},
+    waiting/.style={searchnode,draw=BorderOrange,fill=LightOrangeBg},
+    rejected/.style={searchnode,draw=gray,dashed,fill=CodeBg,text=gray},
+    bestedge/.style={-{Stealth},draw=FITBlue,line width=1.3pt},
+    branch/.style={-{Stealth},draw=gray},
+    rejectedge/.style={branch,dashed}
+}
+
+% ==============================================================================
+% KHAI BÁO THÔNG TIN BÀI TẬP / ĐỒ ÁN
+% ==============================================================================
+\courseid{CSC10043}
+\coursename{NHẬP MÔN TRÍ TUỆ NHÂN TẠO}
+\reportsubtitle{BÁO CÁO BÀI TẬP CÁ NHÂN}
+\title{HOMEWORK SEARCH}
+\instructor{ThS. Bùi Tiến Lên}
+\classid{CQ024/22}
+\academicyear{Học kỳ I, 2026 - 2027}
+
+% Thông tin cá nhân trên trang bìa theo templateFirtPage.pdf.
+\author{
+    \begin{tabular}{lll}
+        \textbf{MSSV} & \textbf{Họ và tên} & \textbf{Email sinh viên} \\
+        24120023 & Nguyễn Thành Bảo & 24120023@student.hcmus.edu.vn
+    \end{tabular}
+}
+
+\begin{document}
+
+% Trang bìa dùng đúng bố cục có sẵn trong fit_hcmus.sty.
+\pagenumbering{arabic}
+\makecoverpage
+% titlepage đặt lại bộ đếm; trang nội dung đầu tiên phải là trang 2.
+\setcounter{page}{2}
+\pagestyle{fancy}
+
+% ==============================================================================
+% CÁC CHƯƠNG MỤC NỘI DUNG (SECTIONS)
+% ==============================================================================
+\input{sections/homework_01_manhattan}
+\input{sections/homework_02_strategy}
+\input{sections/homework_03_trees}
+\input{sections/homework_04_result}
+
+% ==============================================================================
+% TÀI LIỆU THAM KHẢO (BIBLIOGRAPHY)
+% ==============================================================================
+% Bài giải dựa trực tiếp vào đề; không dùng danh mục tài liệu mẫu không liên quan.
+
+\end{document}
